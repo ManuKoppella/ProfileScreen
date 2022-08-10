@@ -7,12 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +25,10 @@ import com.catalin.profilepage.ui.theme.ProfilePageTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,91 +46,156 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ProfileScreen() {
-
-    val notification = rememberSaveable { mutableStateOf("") }
-    if (notification.value.isNotEmpty()) {
-        Toast.makeText(LocalContext.current, notification.value, Toast.LENGTH_LONG).show()
-        notification.value = ""
-    }
-
-    var name by rememberSaveable { mutableStateOf("default name") }
-    var username by rememberSaveable { mutableStateOf("default username") }
-    var bio by rememberSaveable { mutableStateOf("default bio") }
-
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Cancel",
-                modifier = Modifier.clickable { notification.value = "Cancelled" })
-            Text(text = "Save",
-                modifier = Modifier.clickable { notification.value = "Profile updated" })
-        }
-
-        ProfileImage()
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 4.dp, end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Name", modifier = Modifier.width(100.dp))
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    textColor = Color.Black
+     val image = painterResource(R.drawable.img_4081)
+    // Create a box to overlap image and texts
+    Box {
+                Image(
+                    painter = image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    contentScale = ContentScale.Crop
                 )
+
+        val notification = rememberSaveable { mutableStateOf("") }
+        if (notification.value.isNotEmpty()) {
+            Toast.makeText(LocalContext.current, notification.value, Toast.LENGTH_LONG).show()
+            notification.value = ""
+        }
+
+        var username by rememberSaveable { mutableStateOf("default Username") }
+        var event by rememberSaveable { mutableStateOf("Add Event") }
+        var journal by rememberSaveable {
+            mutableStateOf(
+                "Add to journal+ "
             )
         }
 
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 4.dp, end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .verticalScroll(rememberScrollState())
+                .padding(8.dp)
         ) {
-            Text(text = "Username", modifier = Modifier.width(100.dp))
-            TextField(
-                value = username,
-                onValueChange = { username = it },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    textColor = Color.Black
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "Cancel",
+                    modifier = Modifier.clickable { notification.value = "Cancelled" })
+                Text(text = "Save",
+                    modifier = Modifier.clickable { notification.value = "Profile updated" })
+            }
+
+            ProfileImage()
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Username: ", modifier = Modifier.width(100.dp))
+                TextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        textColor = Color.Black
+                    )
                 )
-            )
-        }
+            }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.Top
-        ) {
-            Text(
-                text = "Bio", modifier = Modifier
-                    .width(100.dp)
-                    .padding(top = 8.dp)
-            )
-            TextField(
-                value = bio,
-                onValueChange = { bio = it },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    textColor = Color.Black
-                ),
-                singleLine = false,
-                modifier = Modifier.height(150.dp)
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(text = "Upcoming Events:", modifier = Modifier.width(100.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+
+                    Text(
+                        text = "4/27: LQBTQ Rally", modifier = Modifier
+                            .width(250.dp)
+                            .padding(start = 15.dp)
+                    )
+                    Text(
+                        text = "5/15: NAACP Protest", modifier = Modifier
+                            .width(250.dp)
+                            .padding(start = 15.dp)
+                    )
+                    Text(
+                        text = "5/29: Association on American...", modifier = Modifier
+                            .width(250.dp)
+                            .padding(start = 15.dp)
+                    )
+                    TextField(
+                        value = event,
+                        onValueChange = { event = it },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            textColor = Color.Black
+
+                        ),
+                        singleLine = false,
+                        modifier = Modifier.height(50.dp)
+
+                    )
+
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "Journal:", modifier = Modifier
+                        .width(100.dp)
+                        .padding(top = 8.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "Events 1", modifier = Modifier
+                            .width(100.dp)
+                            .padding(start = 15.dp)
+                    )
+                    Text(
+                        text = "Events 2", modifier = Modifier
+                            .width(100.dp)
+                            .padding(start = 15.dp)
+                    )
+                    Text(
+                        text = "Events 3", modifier = Modifier
+                            .width(100.dp)
+                            .padding(start = 15.dp)
+                    )
+
+                    TextField(
+                        value = journal,
+                        onValueChange = { journal = it },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            textColor = Color.Black
+                        ),
+                        singleLine = false,
+                        modifier = Modifier.height(50.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -154,6 +220,7 @@ fun ProfileImage() {
             .padding(8.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         Card(
             shape = CircleShape,
