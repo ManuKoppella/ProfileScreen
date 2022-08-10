@@ -120,12 +120,13 @@ fun ProfileScreen() {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.Start
                 ) {
-
-                    Text(
-                        text = "4/27: LQBTQ Rally", modifier = Modifier
-                            .width(250.dp)
-                            .padding(start = 15.dp)
-                    )
+Surface(modifier = ) {
+    Text(
+        text = "4/27: LQBTQ Rally", modifier = Modifier
+            .width(250.dp)
+            .padding(start = 15.dp)
+    )
+}
                     Text(
                         text = "5/15: NAACP Protest", modifier = Modifier
                             .width(250.dp)
